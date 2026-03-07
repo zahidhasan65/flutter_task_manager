@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
+import 'main_screen.dart';
 
 class PasswordScreen extends StatefulWidget {
   PasswordScreen({super.key});
@@ -59,7 +60,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         hintText: '*********'
                     ),
                   ), SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {}, child: Text("Reset")),
+                  ElevatedButton(onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MainScreen()),
+                          (route)=>false,
+                    );
+                  }, child: Text("Reset")),
                   SizedBox(height: 5),
 
                   SizedBox(height: 16),

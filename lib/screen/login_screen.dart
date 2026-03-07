@@ -1,23 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/screen/main_screen.dart';
 import 'package:task_manager/screen/signup_screen.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-   LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState>_formkey=GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  final TextEditingController _emailTEcontroller=TextEditingController();
+  final TextEditingController _emailTEcontroller = TextEditingController();
 
-  final TextEditingController _passwordTEcontroller=TextEditingController();
-
-
+  final TextEditingController _passwordTEcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,53 +41,76 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailTEcontroller,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      hintText: 'example@gmail.com'
+                      hintText: 'example@gmail.com',
                     ),
                   ),
 
-                  TextFormField(controller: _passwordTEcontroller,
+                  TextFormField(
+                    controller: _passwordTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: '********'
+                      labelText: 'Password',
+                      hintText: '********',
                     ),
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {}, child: Text("Login")),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainScreen()),
+                          (route)=>false,
+                      );
+                    },
+                    child: Text("Login"),
+                  ),
                   SizedBox(height: 5),
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordScreen()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPasswordScreen(),
+                          ),
+                        );
                       },
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
-                            color: Colors.grey.shade800,
-                          fontSize: 16
+                          color: Colors.grey.shade800,
+                          fontSize: 16,
                         ),
-
                       ),
                     ),
                   ),
                   SizedBox(height: 1),
                   Center(
-                    child: RichText(text: TextSpan(
-                      style: TextStyle(color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                      text: "Don't have an account?  ",
-                      children: [TextSpan(
-                        text: "  Sign Up",style: TextStyle(color: Colors.blue,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        text: "Don't have an account?  ",
+                        children: [
+                          TextSpan(
+                            text: "  Sign Up",
+                            style: TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignupScreen(),
+                                  ),
+                                );
+                              },
+                          ),
+                        ],
                       ),
-                        recognizer: TapGestureRecognizer()..onTap=(){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScreen()));
-
-                        },
-                      )]
-
-
-                    )),
-                  )
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -97,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     _emailTEcontroller.dispose();
     _passwordTEcontroller.dispose();
     super.dispose();
   }
-
 }
