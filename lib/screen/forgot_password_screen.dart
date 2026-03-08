@@ -6,15 +6,16 @@ import 'login_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   ForgotPasswordScreen({super.key});
+  static const String name = '/ForgotPasswordScreen';
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final GlobalKey<FormState>_formkey=GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  final TextEditingController _emailTEcontroller=TextEditingController();
+  final TextEditingController _emailTEcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,43 +35,57 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 16),
-                  Text("A six-digit verification code will be send to your email address for reset your password.",style: TextStyle(
-                    fontSize: 18
-                  ),),
+                  Text(
+                    "A six-digit verification code will be send to your email address for reset your password.",
+                    style: TextStyle(fontSize: 18),
+                  ),
                   SizedBox(height: 16),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     controller: _emailTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'example@gmail.com'
+                      labelText: 'Email',
+                      hintText: 'example@gmail.com',
                     ),
-                  ), SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PinVerificationScreen()));
-
-                  }, child: Text("Code")),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                          PinVerificationScreen.name
+                      );
+                    },
+                    child: Text("Code"),
+                  ),
                   SizedBox(height: 5),
 
                   SizedBox(height: 16),
                   Center(
-                    child: RichText(text: TextSpan(
-                        style: TextStyle(color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                        text: "Already have an account? ",
-                        children: [TextSpan(
-                          text: "  Sign In",style: TextStyle(color: Colors.blue,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                          recognizer: TapGestureRecognizer()..onTap=(){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-
-                          },
-                        )]
-
-
-                    )),
-                  )
+                        text: "Already have an account? ",
+                        children: [
+                          TextSpan(
+                            text: "  Sign In",
+                            style: TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(
+                                  context,
+                                    LoginScreen.name
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -79,10 +94,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     _emailTEcontroller.dispose();
     super.dispose();
   }
-
 }

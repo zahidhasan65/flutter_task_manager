@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/screen/new_task_screen.dart';
 import 'package:task_manager/screen/progress_screen.dart';
 
-import '../widgets/app_bar.dart';
+import '../widgets/app_bar_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+  static const String name='/MainScreen';
 
   @override
   State<MainScreen> createState() => _MainScreenState();

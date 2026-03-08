@@ -1,12 +1,16 @@
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
-import 'package:task_manager/screen/login_screen.dart';
-import 'package:task_manager/widgets/app_bar.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:task_manager/widgets/app_bar_widget.dart';
 import '../widgets/image_piker_widget.dart';
 import 'main_screen.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});
+  static const String name='/UpdateProfile';
+
+
   @override
   State<UpdateProfile> createState() => _UpdateProfileState();
 }
@@ -18,10 +22,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController _lstnameTEcontroller = TextEditingController();
   final TextEditingController _phoneTEcontroller = TextEditingController();
   final TextEditingController _passwordTEcontroller = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+ XFile? _selectedImage;
+  Future<void> _pickImage() async {
+    XFile? profileImage = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (profileImage != null) {
+
+      setState(() { _selectedImage = profileImage;});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(),
+      appBar: AppBarWidget(updateScreen: true,),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -37,7 +51,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 16),
-                  ImagePiker(),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: ImagePiker(imageName: _selectedImage?.name,),
+                  ),
                   SizedBox(height: 16),
                   TextFormField(
                     textInputAction: TextInputAction.next,
@@ -114,5 +131,3 @@ class _UpdateProfileState extends State<UpdateProfile> {
     super.dispose();
   }
 }
-
-

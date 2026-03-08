@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../screen/update_profile_screen.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarWidget({super.key});
+  const AppBarWidget({super.key, this.updateScreen});
+  final bool? updateScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           GestureDetector(
               onTap: (){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateProfile()));
+                if(updateScreen ?? true){
+                  return ;
+                }
+               Navigator.pushNamed(context, UpdateProfile.name);
               },
               child: CircleAvatar(radius: 25)),
           SizedBox(width: 10),

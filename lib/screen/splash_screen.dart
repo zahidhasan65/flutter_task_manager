@@ -4,9 +4,13 @@ import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  static const String name='/splashScreen';
   @override
+
   State<SplashScreen> createState() => _SplashScreenState();
 }
+
 
 class _SplashScreenState extends State<SplashScreen> {
   bool buttonVisible = false;
@@ -43,9 +47,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   duration: Duration(seconds: 1),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (contex) => LoginScreen()),
+                        LoginScreen.name,
                           (route)=>false,
                       );
                     },

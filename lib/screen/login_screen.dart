@@ -6,6 +6,7 @@ import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
+  static const String name='/LoginScreen';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -55,9 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
+                      Navigator.pushNamedAndRemoveUntil(
+                        context, MainScreen.name,
                           (route)=>false,
                       );
                     },
@@ -67,11 +67,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen(),
-                          ),
+
+                            ForgotPasswordScreen.name,
                         );
                       },
                       child: Text(
@@ -99,11 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(color: Colors.blue),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
+                                Navigator.pushNamed(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupScreen(),
-                                  ),
+                                 SignupScreen.name
                                 );
                               },
                           ),

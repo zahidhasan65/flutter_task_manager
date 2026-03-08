@@ -2,18 +2,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/screen/login_screen.dart';
 import 'main_screen.dart';
+
 class SignupScreen extends StatefulWidget {
- const SignupScreen({super.key});
+  const SignupScreen({super.key});
+  static const String name = '/SignupScreen';
+
   @override
   State<SignupScreen> createState() => _SignupScreenState();
 }
+
 class _SignupScreenState extends State<SignupScreen> {
-  final GlobalKey<FormState>_formkey=GlobalKey<FormState>();
-  final TextEditingController _emailTEcontroller=TextEditingController();
-  final TextEditingController _fstnameTEcontroller=TextEditingController();
-  final TextEditingController _lstnameTEcontroller=TextEditingController();
-  final TextEditingController _phoneTEcontroller=TextEditingController();
-  final TextEditingController _passwordTEcontroller=TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final TextEditingController _emailTEcontroller = TextEditingController();
+  final TextEditingController _fstnameTEcontroller = TextEditingController();
+  final TextEditingController _lstnameTEcontroller = TextEditingController();
+  final TextEditingController _phoneTEcontroller = TextEditingController();
+  final TextEditingController _passwordTEcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +40,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _emailTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'example@gmail.com'
+                      labelText: 'Email',
+                      hintText: 'example@gmail.com',
                     ),
                   ),
                   SizedBox(height: 16),
@@ -45,8 +49,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _fstnameTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'First Name',
-                        hintText: 'Zahid'
+                      labelText: 'First Name',
+                      hintText: 'Zahid',
                     ),
                   ),
                   SizedBox(height: 16),
@@ -54,8 +58,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _lstnameTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Last Name',
-                        hintText: 'Hasan'
+                      labelText: 'Last Name',
+                      hintText: 'Hasan',
                     ),
                   ),
                   SizedBox(height: 16),
@@ -64,8 +68,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.number,
                     controller: _phoneTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Phone',
-                        hintText: '0174971......'
+                      labelText: 'Phone',
+                      hintText: '0174971......',
                     ),
                   ),
                   SizedBox(height: 16),
@@ -73,34 +77,48 @@ class _SignupScreenState extends State<SignupScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _passwordTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: '********'
+                      labelText: 'Password',
+                      hintText: '********',
                     ),
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
-                          (route)=>false,
-                    );
-                  }, child: Text("Register")),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        MainScreen.name,
+                        (route) => false,
+                      );
+                    },
+                    child: Text("Register"),
+                  ),
                   SizedBox(height: 16),
                   Center(
-                    child: RichText(text: TextSpan(
-                        style: TextStyle(color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                        text: "Already have an account? ",
-                        children: [TextSpan(
-                          text: "  Sign In",style: TextStyle(color: Colors.blue,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                          recognizer: TapGestureRecognizer()..onTap=(){
-                           Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                          },
-                        )]
-                    )),
-                  )
+                        text: "Already have an account? ",
+                        children: [
+                          TextSpan(
+                            text: "  Sign In",
+                            style: TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(
+                                  context,
+                                  LoginScreen.name
+
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -109,6 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     _emailTEcontroller.dispose();

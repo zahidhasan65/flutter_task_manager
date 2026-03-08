@@ -6,6 +6,7 @@ import '../widgets/task_count_widget.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
+  static const String name = '/NewTaskScreen';
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
@@ -47,12 +48,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewTaskScreen()));
+          Navigator.pushNamed(
+            context,
+            AddNewTaskScreen.name,
+          );
         },
         child: Icon(Icons.add),
       ),
     );
   }
 }
-
-

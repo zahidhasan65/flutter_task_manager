@@ -1,12 +1,12 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:task_manager/screen/pin_verification_screen.dart';
 
-import '../widgets/app_bar.dart';
-import 'login_screen.dart';
+import 'package:flutter/material.dart';
+
+import '../widgets/app_bar_widget.dart';
+
 
 class AddNewTaskScreen extends StatefulWidget {
   AddNewTaskScreen({super.key});
+  static const String name='/AddNewTaskScreen';
 
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();

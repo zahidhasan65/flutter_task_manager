@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
+  static const String name='/ProgressScreen';
 
   @override
   State<ProgressScreen> createState() => _ProgressScreenState();

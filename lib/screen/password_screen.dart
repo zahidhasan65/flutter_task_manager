@@ -6,19 +6,20 @@ import 'main_screen.dart';
 
 class PasswordScreen extends StatefulWidget {
   PasswordScreen({super.key});
+  static const String name = '/PasswordScreen';
 
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  final GlobalKey<FormState>_formkey=GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  final TextEditingController _newpasswordTEcontroller=TextEditingController();
+  final TextEditingController _newpasswordTEcontroller =
+      TextEditingController();
 
-  final TextEditingController _confirmpasswordTEcontroller=TextEditingController();
-
-
+  final TextEditingController _confirmpasswordTEcontroller =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,62 +33,74 @@ class _PasswordScreenState extends State<PasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 200),
+                  SizedBox(height: 130),
                   Text(
                     'Reset password',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 16),
 
-                  Text( "Make sure it is strong and secure and length should not be less then 6 and more then 8.",style: TextStyle(
-                      fontSize: 18
-                  ),),
+                  Text(
+                    "Make sure it is strong and secure and length should not be less then 6 and more then 8.",
+                    style: TextStyle(fontSize: 18),
+                  ),
                   SizedBox(height: 16),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     controller: _newpasswordTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'New Password',
-                        hintText: '*********'
+                      labelText: 'New Password',
+                      hintText: '*********',
                     ),
-                  ), SizedBox(height: 16),
+                  ),
+                  SizedBox(height: 16),
                   SizedBox(height: 16),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     controller: _confirmpasswordTEcontroller,
                     decoration: InputDecoration(
-                        labelText: 'Confirm Password',
-                        hintText: '*********'
+                      labelText: 'Confirm Password',
+                      hintText: '*********',
                     ),
-                  ), SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
-                          (route)=>false,
-                    );
-                  }, child: Text("Reset")),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,MainScreen.name,
+                        (route) => false,
+                      );
+                    },
+                    child: Text("Reset"),
+                  ),
                   SizedBox(height: 5),
 
                   SizedBox(height: 16),
                   Center(
-                    child: RichText(text: TextSpan(
-                        style: TextStyle(color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                        text: "Already have an account? ",
-                        children: [TextSpan(
-                          text: "  Sign In",style: TextStyle(color: Colors.blue,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                          recognizer: TapGestureRecognizer()..onTap=(){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-
-                          },
-                        )]
-
-
-                    )),
-                  )
+                        text: "Already have an account? ",
+                        children: [
+                          TextSpan(
+                            text: "  Sign In",
+                            style: TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(
+                                  context,
+                                    LoginScreen.name
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -96,11 +109,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     _newpasswordTEcontroller.dispose();
     _confirmpasswordTEcontroller.dispose();
     super.dispose();
   }
-
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class ImagePiker extends StatelessWidget {
   const ImagePiker({
-    super.key,
+    super.key, required this.imageName,
   });
-
+  final String? imageName;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,10 +34,13 @@ class ImagePiker extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('No photo selected',style: TextStyle(fontSize: 18),),
+                child: Text(
+                  imageName ?? "No photo selected",
+                  style: const TextStyle(fontSize: 18),
+                )
+              ),
               ),
             ),
-          ),
         ],
       ),
     );
