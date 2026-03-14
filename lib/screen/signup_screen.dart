@@ -86,7 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        MainScreen.name,
+                        LoginScreen.name,
                         (route) => false,
                       );
                     },

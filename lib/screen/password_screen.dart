@@ -67,7 +67,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
-                        context,MainScreen.name,
+                        context,LoginScreen.name,
                         (route) => false,
                       );
                     },

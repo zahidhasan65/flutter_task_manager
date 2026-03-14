@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../screen/update_profile_screen.dart';
+
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget({super.key, this.updateScreen});
   final bool? updateScreen;
@@ -12,7 +13,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           GestureDetector(
               onTap: (){
-                if(updateScreen ?? true){
+                if(updateScreen ?? false){
                   return ;
                 }
                Navigator.pushNamed(context, UpdateProfile.name);

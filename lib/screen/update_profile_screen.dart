@@ -8,7 +8,7 @@ import 'main_screen.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});
-  static const String name='/UpdateProfile';
+  static const String name='/UpdateProfile()';
 
 
   @override
