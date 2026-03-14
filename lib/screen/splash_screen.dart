@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                SizedBox(height: 150),
+                SizedBox(height: 120),
                 SvgPicture.asset(
                   "assets/images/undraw_process_0wew.svg",
                   height: 400,
