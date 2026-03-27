@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:task_manager/screen/main_screen.dart';
+import '../controller/auth_controller.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,9 +16,24 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool buttonVisible = false;
+  bool isLogin = false;
   void initState() {
     super.initState();
+    checkedLogin();
     show_button();
+  }
+  Future<void> checkedLogin()async{
+    isLogin= await AuthController.isUserAlreadLoggedin();
+    if(isLogin){
+
+      await AuthController.getUserData();
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        MainScreen.name,
+            (route)=>false,
+      );
+    }
+
   }
 
   Future<void> show_button() async {
@@ -46,14 +63,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   opacity: buttonVisible ? 1 : 0,
                   duration: Duration(seconds: 1),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        LoginScreen.name,
-                          (route)=>false,
-                      );
+                    onPressed: () async {
+                      {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          LoginScreen.name,
+                          (route) => false,
+                        );
+                      }
                     },
-                    child: Text("Get Started"),
+                    child: Text(isLogin?"Welcome Back":"Get Started"),
                   ),
                 ),
               ],

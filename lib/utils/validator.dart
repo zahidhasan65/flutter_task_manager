@@ -59,4 +59,21 @@ class Validator {
 
     return null;
   }
+
+  static String? title(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Enter task title";
+    }
+    return null;
+  }
+
+  static String? discription(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Enter task discription";
+    }
+    if (value.length < 10) {
+      return "Enter a valid discription";
+    }
+    return null;
+  }
 }

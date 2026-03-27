@@ -2,8 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/Data/Services/api_caller.dart';
 import 'package:task_manager/screen/login_screen.dart';
-import '../Data/utils/urls.dart';
+
+import '../utils/urls.dart';
 import '../utils/validator.dart';
+
 
 
 class SignupScreen extends StatefulWidget {
@@ -152,7 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
       url: urls.registrationUrl,
       body: requistDataBody
     );
-    if (response.isSuccess) {
+    if (response.isSuccess&& response.responseData['status']=='success') {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Registration Successful")),

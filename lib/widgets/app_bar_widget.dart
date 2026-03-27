@@ -1,34 +1,48 @@
 import 'package:flutter/material.dart';
-
+import 'package:task_manager/controller/auth_controller.dart';
+import 'package:task_manager/screen/login_screen.dart';
 import '../screen/update_profile_screen.dart';
-
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   const AppBarWidget({super.key, this.updateScreen});
   final bool? updateScreen;
 
+  @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(65);
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Row(
         children: [
           GestureDetector(
-              onTap: (){
-                if(updateScreen ?? false){
-                  return ;
-                }
-               Navigator.pushNamed(context, UpdateProfile.name);
-              },
-              child: CircleAvatar(radius: 25)),
+            onTap: () {
+              if (widget.updateScreen ?? false) {
+                return;
+              }
+              Navigator.pushNamed(context, UpdateProfile.name);
+            },
+            child: CircleAvatar(radius: 25),
+          ),
           SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Zahid hasan",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+               AuthController.userModel?.fullName ?? " ",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               Text(
-                "example@gmail.com",
+                AuthController.userModel?.email ?? " ",
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
             ],
@@ -37,9 +51,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: signOut,
           icon: Icon(
-            Icons.notifications,
+            Icons.logout,
             size: 32,
             color: Colors.black.withOpacity(.7),
           ),
@@ -49,7 +63,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(65);
+  Future<void> signOut() async {
+     await AuthController.clearUserData();
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      LoginScreen.name,
+      (predicate) => false,
+    );
+
+  }
+
 }

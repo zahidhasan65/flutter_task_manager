@@ -1,8 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/Data/Services/api_caller.dart';
 import 'package:task_manager/screen/main_screen.dart';
 import 'package:task_manager/screen/signup_screen.dart';
+import '../Data/models/user_models.dart';
+import '../controller/auth_controller.dart';
+import '../utils/urls.dart';
+import '../utils/validator.dart';
 import 'forgot_password_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -18,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTEcontroller = TextEditingController();
 
   final TextEditingController _passwordTEcontroller = TextEditingController();
+  bool _loginInProgress=false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
+                    validator: Validator.email,
                     textInputAction: TextInputAction.next,
                     controller: _emailTEcontroller,
                     decoration: InputDecoration(
@@ -47,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   TextFormField(
+                    validator: Validator.password,
                     controller: _passwordTEcontroller,
                     decoration: InputDecoration(
                       labelText: 'Password',
@@ -54,14 +64,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context, MainScreen.name,
-                          (route)=>false,
-                      );
-                    },
-                    child: Text("Login"),
+                  Visibility(
+                    visible: _loginInProgress==false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formkey.currentState!.validate())
+                        userLogin();
+
+                      },
+                      child: Text("Login"),
+                    ),
                   ),
                   SizedBox(height: 5),
                   Center(
@@ -117,6 +130,44 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+Future<void> userLogin()async{
+  _loginInProgress=true;
+  setState(() {
+
+  });
+  Map<String,dynamic> loginDataBody=
+  {
+      "email":_emailTEcontroller.text.trim(),
+      "password":_passwordTEcontroller.text
+  };
+
+  final ApiResponse response=await ApiCaller.postRequest(url: urls.loginUrl, body: loginDataBody);
+  if(response.isSuccess&&response.responseData['status']=='success'){
+    UserModels model=UserModels.fromJson(response.responseData['data']);
+    String token=response.responseData['token'];
+    await AuthController.saveUserData(model, token);
+    Navigator.pushNamedAndRemoveUntil(
+      context, MainScreen.name,
+          (route)=>false,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Login Successful")),
+    );
+  }
+  else{
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(response.errorMsg?? 'Login Fail')),
+    );
+
+  }
+
+  _loginInProgress=false;
+  setState(() {
+
+  });
+  print("dome");
+  
+}
   @override
   void dispose() {
     _emailTEcontroller.dispose();
