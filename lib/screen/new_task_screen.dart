@@ -5,7 +5,7 @@ import 'package:task_manager/widgets/task_cart_widget.dart';
 import '../Data/Services/api_caller.dart';
 import '../Data/models/task_status_model.dart';
 import '../utils/urls.dart';
-import '../widgets/task_count_widget.dart';
+import '../widgets/count_widget.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
@@ -22,7 +22,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     // TODO: implement initState
     super.initState();
     getAllTaskCount();
-    print('initstate');
   }
 
   @override
@@ -42,16 +41,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     child: CircularProgressIndicator(strokeWidth: 7,),
                   ))
               ,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _taskCount.length,
-                itemBuilder: (context, index) {
-                  return Task_Count(value: _taskCount[index].countTask, taskTitle: _taskCount[index].status);
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
-              ),
+              child: CountWidget(taskCount: _taskCount),
             ),
           ),
           Expanded(
@@ -102,3 +92,4 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     });
   }
 }
+

@@ -1,21 +1,25 @@
 import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:task_manager/app.dart';
 import 'package:task_manager/controller/auth_controller.dart';
+import 'package:task_manager/screen/login_screen.dart';
+
 
 class ApiCaller {
-
   static final Logger _logger = Logger();
 
   static Future<ApiResponse> getRequest({required String url}) async {
-
     try {
-
       Uri uri = Uri.parse(url);
 
       _logRequest(url);
 
-      Response response = await get(uri, headers: { 'token': AuthController.userToken?? ''}
+      Response response = await get(
+        uri,
+        headers: {'token': AuthController.userToken ?? ''},
       );
 
       _logResponse(uri.toString(), response);
@@ -29,22 +33,28 @@ class ApiCaller {
           responseData: decodedData,
         );
       }
-
-      return ApiResponse(
-        isSuccess: false,
-        responseCode: response.statusCode,
-        responseData: decodedData,
-      );
-
+      else if(response.statusCode==401){
+        moveToLogin();
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: response.statusCode,
+          responseData: decodedData,
+        );
+      }
+      else {
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: response.statusCode,
+          responseData: decodedData,
+        );
+      }
     } catch (e) {
-
       return ApiResponse(
         isSuccess: false,
         responseCode: -1,
         responseData: null,
         errorMsg: "Something went wrong",
       );
-
     }
   }
 
@@ -52,17 +62,17 @@ class ApiCaller {
     required String url,
     required Map<String, dynamic> body,
   }) async {
-
     try {
-
       Uri uri = Uri.parse(url);
 
       _logRequest(url, body: body);
 
       Response response = await post(
         uri,
-        headers: {'Content-Type': 'application/json',
-        'token': AuthController.userToken?? ''},
+        headers: {
+          'Content-Type': 'application/json',
+          'token': AuthController.userToken ?? '',
+        },
 
         body: jsonEncode(body),
       );
@@ -78,43 +88,55 @@ class ApiCaller {
           responseData: decodedData,
         );
       }
-
-      return ApiResponse(
-        isSuccess: false,
-        responseCode: response.statusCode,
-        responseData: decodedData,
-      );
-
+      else if(response.statusCode==401){
+        moveToLogin();
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: response.statusCode,
+          responseData: decodedData,
+        );
+      }
+      else
+      {
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: response.statusCode,
+          responseData: decodedData,
+        );
+      }
     } catch (e) {
-
       return ApiResponse(
         isSuccess: false,
         responseCode: -1,
         responseData: null,
         errorMsg: "Something went wrong",
       );
-
     }
   }
 
   static void _logRequest(String url, {Map<String, dynamic>? body}) {
     _logger.i(
       'Url = $url\n'
-          'Request Body = $body',
+      'Request Body = $body',
     );
   }
 
   static void _logResponse(String url, Response response) {
     _logger.i(
       'Url = $url\n'
-          'StatusCode = ${response.statusCode}\n'
-          'Data = ${response.body}',
+      'StatusCode = ${response.statusCode}\n'
+      'Data = ${response.body}',
     );
+  }
+  static void moveToLogin()async{
+    await AuthController.clearUserData();
+    Navigator.pushNamedAndRemoveUntil(TaskManagerApp.navigator.currentContext!, LoginScreen.name, (predicate)=>false);
+
+
   }
 }
 
 class ApiResponse {
-
   final bool isSuccess;
   final int responseCode;
   final dynamic responseData;
@@ -126,5 +148,6 @@ class ApiResponse {
     required this.responseData,
     this.errorMsg,
   });
-
 }
+
+
