@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 class Task_Count extends StatelessWidget {
-  final value;
-  String taskTitle;
+  final int value;
+ final String taskTitle;
   Task_Count({
     super.key,required this.value, required this.taskTitle,
   });

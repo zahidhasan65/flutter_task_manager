@@ -107,7 +107,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       "status": "New",
     };
     final ApiResponse response = await ApiCaller.postRequest(
-      url: urls.addNewTask,
+      url: urls.addNewTaskUrl,
       body: requestBody,
     );
     if (response.isSuccess) {

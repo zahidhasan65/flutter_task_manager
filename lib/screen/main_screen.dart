@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/Data/Services/api_caller.dart';
-import 'package:task_manager/Data/models/task_status_model.dart';
 import 'package:task_manager/screen/new_task_screen.dart';
 import 'package:task_manager/screen/progress_screen.dart';
-import '../utils/urls.dart';
+
 import '../widgets/app_bar_widget.dart';
+import 'cancelled_screen.dart';
+import 'completed_Task_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,8 +20,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screen = [
     NewTaskScreen(),
     ProgressScreen(),
-    ProgressScreen(),
-    ProgressScreen(),
+    CancelledScreen(),
+    CompletedTaskScreen(),
   ];
   Widget build(BuildContext context) {
     return Scaffold(
