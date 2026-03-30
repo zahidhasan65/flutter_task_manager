@@ -18,6 +18,7 @@ class AuthController {
     );
     userToken = token;
     userModel = model;
+
   }
 
   static Future<void> getUserData() async {

@@ -37,7 +37,7 @@ class _CancelledScreenState extends State<CancelledScreen> {
           itemBuilder: (context, index) {
             return TaskCartWidget(taskModel: _cancellTask[index], refreshList: () {
               getAllCancellTask();
-            },);
+            }, color: Colors.red,);
           },
           separatorBuilder: (context, index) {
             return SizedBox();
@@ -52,7 +52,7 @@ class _CancelledScreenState extends State<CancelledScreen> {
     _cancellTaskInProgress= true;
     setState(() {});
     final ApiResponse response = await ApiCaller.getRequest(
-      url: urls.cancellTaskListUrl,
+      url: urls.getTaskListUrl('Cancelled'),
     );
     if (response.isSuccess) {
       List<GetTaskModel> list = [];

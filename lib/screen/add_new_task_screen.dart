@@ -111,11 +111,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       body: requestBody,
     );
     if (response.isSuccess) {
-      Navigator.pushNamedAndRemoveUntil(context, NewTaskScreen.name,(route)=>false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Add task successfully")));
       clearTextfield();
+      Navigator.pop(context,true);
     } else {
       ScaffoldMessenger.of(
         context,

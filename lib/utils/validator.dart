@@ -71,7 +71,7 @@ class Validator {
     if (value == null || value.trim().isEmpty) {
       return "Enter task discription";
     }
-    if (value.length < 10) {
+    if (value.length < 5) {
       return "Enter a valid discription";
     }
     return null;

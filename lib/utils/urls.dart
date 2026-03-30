@@ -4,10 +4,15 @@ class urls {
   static final String loginUrl = '$_baseUrl/login';
   static final String addNewTaskUrl = '$_baseUrl/createTask';
   static final String taskStatusCountUrl = '$_baseUrl/taskStatusCount';
-  static final String  newTaskListUrl = '$_baseUrl/listTaskByStatus/New';
-  static final String  progressTaskListUrl = '$_baseUrl/listTaskByStatus/Progress';
-  static final String  cancellTaskListUrl = '$_baseUrl/listTaskByStatus/Cancelled';
-  static final String  completedTaskListUrl = '$_baseUrl/listTaskByStatus/Completed';
+  static final String updateUserDataUrl = '$_baseUrl/profileUpdate';
+  static final String profileDetailsUrl = '$_baseUrl/profileDetails';
+  static  String deleteTaskUrl(String id) => '$_baseUrl/deleteTask/$id';
+  static   String getTaskListUrl( String status) => '$_baseUrl/listTaskByStatus/$status';
   static   String updateTaskstatusUrl(String id, String status) => '$_baseUrl/updateTaskStatus/$id/$status';
+  static   String forgotPassUrl(String email) => '$_baseUrl/RecoverVerifyEmail/$email';
+
+
+
+
 
 }

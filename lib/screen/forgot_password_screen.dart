@@ -1,7 +1,11 @@
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/Data/Services/api_caller.dart';
 import 'package:task_manager/screen/pin_verification_screen.dart';
+import 'package:task_manager/utils/validator.dart';
 
+import '../utils/urls.dart';
 import 'login_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -16,6 +20,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   final TextEditingController _emailTEcontroller = TextEditingController();
+  bool _forgotPasswordInProgress=false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,6 +47,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
+                    validator: Validator.email,
                     textInputAction: TextInputAction.next,
                     controller: _emailTEcontroller,
                     decoration: InputDecoration(
@@ -49,14 +56,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                          PinVerificationScreen.name
-                      );
-                    },
-                    child: Text("Code"),
+                  Visibility(
+                    visible: !_forgotPasswordInProgress,
+                    replacement: CircularProgressIndicator(),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onTapCode();
+
+                      },
+                      child: Text("Code"),
+                    ),
                   ),
                   SizedBox(height: 5),
 
@@ -77,7 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushNamed(
-                                  context,
+                                    context,
                                     LoginScreen.name
                                 );
                               },
@@ -93,6 +102,32 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
     );
+  }
+  void _onTapCode(){
+    if(_formkey.currentState!.validate()){
+      _forgotPass();
+    }
+  }
+
+  Future<void> _forgotPass()async{
+    _forgotPasswordInProgress=true;
+    setState(() {
+    });
+
+    final ApiResponse response=await ApiCaller.getRequest(url: urls.forgotPassUrl(_emailTEcontroller.text.trim()));
+if(response.isSuccess){
+  Navigator.pushNamed(
+      context,
+      PinVerificationScreen.name
+  );
+}
+else{
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.errorMsg.toString())));
+}
+
+    _forgotPasswordInProgress=false;
+    setState(() {
+    });
   }
 
   @override

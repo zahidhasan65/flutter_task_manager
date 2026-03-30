@@ -37,7 +37,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
           itemBuilder: (context, index) {
             return TaskCartWidget(taskModel: _completedTask[index], refreshList: () {
               getAllCompletedTask();
-            },);
+            },color: Colors.green);
           },
           separatorBuilder: (context, index) {
             return SizedBox();
@@ -52,7 +52,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
     _completedTaskInProgress= true;
     setState(() {});
     final ApiResponse response = await ApiCaller.getRequest(
-      url: urls.completedTaskListUrl,
+      url: urls.getTaskListUrl('Completed'),
     );
     if (response.isSuccess) {
       List<GetTaskModel> list = [];

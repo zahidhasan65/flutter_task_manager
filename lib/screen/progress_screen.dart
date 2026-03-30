@@ -37,7 +37,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               itemBuilder: (context, index) {
                 return TaskCartWidget(taskModel: _progressTask[index], refreshList: () {
                   getAllProgressTask();
-                },);
+                }, color: Colors.orange);
               },
               separatorBuilder: (context, index) {
                 return SizedBox();
@@ -52,7 +52,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
     _progressTaskInProgress = true;
     setState(() {});
     final ApiResponse response = await ApiCaller.getRequest(
-      url: urls.progressTaskListUrl,
+      url: urls.getTaskListUrl("Progress"),
     );
     if (response.isSuccess) {
       List<GetTaskModel> list = [];

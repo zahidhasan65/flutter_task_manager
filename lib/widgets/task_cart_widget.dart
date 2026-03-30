@@ -6,16 +6,22 @@ import '../utils/urls.dart';
 
 class TaskCartWidget extends StatefulWidget {
   final GetTaskModel taskModel;
- final VoidCallback refreshList;
-
-  const TaskCartWidget({super.key, required this.taskModel, required this.refreshList});
+  final VoidCallback refreshList;
+  final Color color;
+  const TaskCartWidget({
+    super.key,
+    required this.taskModel,
+    required this.refreshList,
+    required this.color,
+  });
 
   @override
   State<TaskCartWidget> createState() => _TaskCartWidgetState();
 }
 
 class _TaskCartWidgetState extends State<TaskCartWidget> {
-  bool _updateTaskStatusInProgress= false;
+  bool _updateTaskStatusInProgress = false;
+  bool _deleteInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,18 +48,28 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
                       widget.taskModel.status,
                       style: TextStyle(color: Colors.white),
                     ),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: widget.color,
                   ),
                   Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.delete),
-                    color: Colors.red,
+                  Visibility(
+                    visible: !_updateTaskStatusInProgress,
+                    replacement: CircularProgressIndicator(),
+                    child: IconButton(
+                      onPressed: _changeTaskStatusDialog,
+                      icon: Icon(Icons.edit),
+                    ),
                   ),
                   Visibility(
-                      visible: !_updateTaskStatusInProgress,
-                      replacement: CircularProgressIndicator(),
-                      child: IconButton(onPressed: _changeTaskStatusDialog, icon: Icon(Icons.edit))),
+                    visible: !_deleteInProgress,
+                    replacement: CircularProgressIndicator(color: Colors.red,),
+                    child: IconButton(
+                      onPressed: () {
+                        _showDeleteDialog();
+                      },
+                      icon: Icon(Icons.delete),
+                      color: Colors.red,
+                    ),
+                  ),
 
                 ],
               ),
@@ -73,9 +89,8 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               ListTile(
-                onTap:() {
+                onTap: () {
                   _changeTaskStatus('New');
                 },
                 title: Text('New'),
@@ -84,7 +99,7 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
                     : null,
               ),
               ListTile(
-                onTap:() {
+                onTap: () {
                   _changeTaskStatus('Progress');
                 },
                 title: Text('Progress'),
@@ -93,9 +108,11 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
                     : null,
               ),
               ListTile(
-                onTap:() {
-                  _changeTaskStatus(''
-                      'Cancelled');
+                onTap: () {
+                  _changeTaskStatus(
+                    ''
+                    'Cancelled',
+                  );
                 },
                 title: Text('Cancelled'),
                 trailing: widget.taskModel.status == 'Cancelled'
@@ -103,7 +120,7 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
                     : null,
               ),
               ListTile(
-                onTap:() {
+                onTap: () {
                   _changeTaskStatus('Completed');
                 },
                 title: Text('Completed'),
@@ -117,33 +134,71 @@ class _TaskCartWidgetState extends State<TaskCartWidget> {
       },
     );
   }
-  Future<void>_changeTaskStatus(String status, )async{
+
+  Future<void> _changeTaskStatus(String status) async {
     print("ID: ${widget.taskModel.id}");
 
     Navigator.pop(context);
-    if(status==widget.taskModel.status)
-      return;
-    _updateTaskStatusInProgress= true;
-    setState(() {
+    if (status == widget.taskModel.status) return;
+    _updateTaskStatusInProgress = true;
+    setState(() {});
 
-    });
-
-    final ApiResponse response= await ApiCaller.getRequest(url: urls.updateTaskstatusUrl(widget.taskModel.id,  status));
-    if(response.isSuccess){
+    final ApiResponse response = await ApiCaller.getRequest(
+      url: urls.updateTaskstatusUrl(widget.taskModel.id, status),
+    );
+    if (response.isSuccess) {
       widget.refreshList();
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Task Status Updated Successfully")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Task Status Updated Successfully")),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(response.errorMsg.toString())));
     }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.errorMsg.toString())));
-    }
-    _updateTaskStatusInProgress= false;
+    _updateTaskStatusInProgress = false;
+    setState(() {});
+  }
+  Future<void> _deleteTask() async {
+    _deleteInProgress = true;
     setState(() {
 
     });
-
+    final ApiResponse response = await ApiCaller.getRequest(
+      url: urls.deleteTaskUrl(widget.taskModel.id),
+    );
+    if (response.isSuccess) {
+      widget.refreshList();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Task Delete Successfully")));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(response.errorMsg.toString())));
     }
+    _deleteInProgress=false;
+    setState(() {
+    });
 
+  }
+  void _showDeleteDialog(){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+      title:Text("Delete Task"),
+        content: Text("Are you want to delete this task!"),
+        actions: [
+          TextButton(onPressed: (){
+            Navigator.pop(context);
+          }, child: Text("Cancel")),
+          TextButton(onPressed: (){
+            _deleteTask();
 
-
+            Navigator.pop(context);
+          }, child: Text("Delete",style: TextStyle(color: Colors.red),)),
+        ],
+      );
+    });
+  }
 }

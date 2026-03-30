@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/Data/models/get_task_model.dart';
+import 'package:task_manager/controller/task_count_controller.dart';
 import 'package:task_manager/screen/add_new_task_screen.dart';
 import 'package:task_manager/widgets/task_cart_widget.dart';
 
@@ -32,7 +33,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     return Scaffold(
       body: Column(
         children: [
-          count_task_status_widget(taskStatusCountInProgress: _taskStatusCountInProgress, taskCount: _taskCount),
+          count_task_status_widget( taskCount: TaskCountController.taskCount, taskStatusCountInProgress: _taskStatusCountInProgress,),
           Expanded(
             child: Visibility(
               visible: _newTaskInProgress==false,
@@ -49,7 +50,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   return TaskCartWidget(taskModel: _newTask[index], refreshList: () {
                     getAllNewTask();
                     getAllTaskCount();
-                  },);
+                  }, color: Colors.blue,);
                 },
                 separatorBuilder: (context, index) {
                   return SizedBox();
@@ -61,8 +62,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AddNewTaskScreen.name);
+        onPressed: () async {
+          final result = await Navigator.pushNamed(
+            context,
+            AddNewTaskScreen.name,
+          );
+
+          if (result == true) {
+            getAllNewTask();
+            getAllTaskCount();
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Task Added Successfully")),
+            );
+          }
         },
         child: Icon(Icons.add),
       ),
@@ -97,7 +110,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     _newTaskInProgress = true;
     setState(() {});
     final ApiResponse response = await ApiCaller.getRequest(
-      url: urls.newTaskListUrl,
+      url: urls.getTaskListUrl('New'),
     );
     if (response.isSuccess) {
       List<GetTaskModel> list = [];
@@ -130,17 +143,7 @@ class count_task_status_widget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 100,
-      child: Visibility(
-        visible: _taskStatusCountInProgress==false,
-        replacement: SizedBox(
-           width: 100,
-            child: Padding(
-              padding: const EdgeInsets.all(19.0),
-              child: Center(child: CircularProgressIndicator(strokeWidth: 5,)),
-            ))
-        ,
-        child: CountWidget(taskCount: _taskCount),
-      ),
+      child: CountWidget(taskCount: _taskCount),
     );
   }
 }

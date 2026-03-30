@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:task_manager/controller/auth_controller.dart';
 import 'package:task_manager/screen/login_screen.dart';
 import '../screen/update_profile_screen.dart';
+
 class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   const AppBarWidget({super.key, this.updateScreen});
   final bool? updateScreen;
@@ -15,26 +18,40 @@ class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
+  final image=AuthController.userModel!.photo;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Row(
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (widget.updateScreen ?? false) {
                 return;
               }
-              Navigator.pushNamed(context, UpdateProfile.name);
+              final result = await Navigator.pushNamed(
+                context,
+                UpdateProfile.name,
+              );
+              if (result == true) {
+                setState(() {});
+              }
             },
-            child: CircleAvatar(radius: 25),
+            child: CircleAvatar(
+              radius: 25,
+              child: image!.isNotEmpty? (Image.memory(base64Decode(image!.split('.').last) )
+              
+              ):
+              Icon(Icons.person)
+              ,
+            ),
           ),
           SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-               AuthController.userModel?.fullName ?? " ",
+                AuthController.userModel?.fullName ?? " ",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -64,13 +81,11 @@ class _AppBarWidgetState extends State<AppBarWidget> {
   }
 
   Future<void> signOut() async {
-     await AuthController.clearUserData();
+    await AuthController.clearUserData();
     Navigator.pushNamedAndRemoveUntil(
       context,
       LoginScreen.name,
       (predicate) => false,
     );
-
   }
-
 }
